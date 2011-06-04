@@ -1,0 +1,175 @@
+{% extends "cms/cms_base.html" %}
+{% load adminmedia %}
+
+{% block extra_title %}Edit page{% endblock %}
+
+{% block extrastyle %}
+<link href="{% admin_media_prefix %}css/changelists.css" rel="stylesheet" type="text/css" media="all" />
+<link href="{% admin_media_prefix %}css/forms.css" rel="stylesheet" type="text/css" media="all" />
+{# cms css files #}
+<link href="{% url cms_media "css/cms.css" %}" rel="stylesheet" type="text/css" media="all" />
+{% endblock %}
+
+{% block extrahead %}
+<script type="text/javascript" src="{% admin_media_prefix %}js/core.js"></script>
+<script type="text/javascript" src="{% admin_media_prefix %}js/jquery.min.js"></script>
+<script type="text/javascript" src="{% admin_media_prefix %}js/admin/RelatedObjectLookups.js"></script>
+{# cms JS files #}
+<script type="text/javascript" src="{% url cms_media "js/jquery.mousewheel.js" %}"></script>
+<script type="text/javascript" src="{% url cms_media "js/jquery.fancybox.js" %}"></script>
+<script type="text/javascript" src="{% url cms_media "js/cms.js" %}"></script>
+{% endblock %}
+
+{% block extra_breadcrumbs %}
+&rsaquo; {{ page.path|escape }}
+{% endblock %}
+
+{% block content_title %}
+<h1>Edit page: {{ page.tpl.NAME }}</h1>
+{% endblock %}
+
+{% block content %}
+{% block object-tools %}
+<ul class="object-tools">
+  <li><a href="{{ page.preview_url }}" target="_blank">Preview</a></li>
+  {% if perms.cms.add_page %}
+  <li><a href="copy/">Copy</a></li>
+  {% endif %}
+  <li><a href="export/">Export</a></li>
+  {% if page.is_live %}
+    {% if perms.cms.add_rendered and perms.cms.change_rendered %}
+    <li><a href="refresh/">Refresh content</a></li>
+    {% endif %}
+    {% if perms.cms.change_page %}
+    <li><a href="unpublish/">Unpublish</a></li>
+    {% endif %}
+  {% else %}
+    {% if perms.cms.change_page and perms.cms.add_rendered and perms.cms.change_rendered %}
+    <li><a href="publish/">Publish</a></li>
+    {% endif %}
+    {% if perms.cms.delete_page %}
+    <li><a class="warning" href="delete/">Delete</a></li>
+    {% endif %}
+  {% endif %}
+  <li><a href="../../{{ page.id }}/history/">History</a></li>
+</ul>
+{% endblock %}
+
+<h3>Information</h3>
+<fieldset class="module aligned">
+  <form action="" method="post"{% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>{% csrf_token %}
+    <h2>Page data</h2>
+    {% if perms.cms.change_page %}
+    {% with form.page_fields as form %} {% include "cms/form_fields.html" %} {% endwith %}
+    {% endif %}
+    <div class="form-row">
+      <label>Locale:</label> <strong>{{ page.path.get_locale_display }}</strong>
+    </div>
+    <div class="form-row">
+      <label>State:</label> <strong>{{ state }}</strong>
+    </div>
+    <div class="form-row">
+      <label>Updated:</label> {{ page.updated|date:"d M Y" }}
+    </div>
+
+    <div class="container">
+      <h2 class="title collapsed">
+        Metadata (<a id="link_metadata" class="collapse" href="#"><span class="label" style="display: none;">Hide</span><span class="label">Show</span></a>)
+      </h2>
+      <div id="container_metadata" style="display: none;">
+        {% if perms.cms.change_page %}
+          {% with form.metadata_fields as form %}
+            {% include "cms/form_fields.html" %}
+          {% endwith %}
+        {% else %}
+        <div class="form-row"><label>Title:</label> {{ page.meta_title|escape }}</div>
+        <div class="form-row"><label>Description:</label> {{ page.meta_description|escape }}</div>
+        <div class="form-row"><label>Keywerds:</label> {{ page.meta_keywords|escape }}</div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="container">
+      <h2 class="title collapsed">
+        Search (<a id="link_search" class="collapse" href="#"><span class="label" style="display: none;">Hide</span><span class="label">Show</span></a>)
+      </h2>
+      <div id="container_search" style="display: none;">
+        {% if perms.cms.change_page %}
+          {% with form.search_fields as form %}
+            {% include "cms/form_fields.html" %}
+          {% endwith %}
+        {% else %}
+        <div class="form-row"><label>Text:</label> {{ page.search_text|escape }}</div>
+        <div class="form-row"><label>Image:</label> {% if page.search_image %}<a href="{{ page.search_image.url }}" target="_blank">Preview</a>{% endif %}</div>
+        {% endif %}
+      </div>
+    </div>
+  </form>
+
+  <div class="container">
+    <h2 class="title collapsed">
+      Template (<a id="link_tpl" class="collapse" href="#"><span class="label" style="display: none;">Hide</span><span class="label">Show</span></a>)
+    </h2>
+    <div id="container_tpl" style="display: none;">
+      <div class="form-row">
+        <label>Name:</label> {{ page.tpl.NAME }}
+      </div>
+      <div class="form-row">
+        <label>Description:</label> {{ page.tpl.DESCRIPTION }}
+      </div>
+    </div>
+  </div>
+</fieldset>
+
+<h3>Sections</h3>
+<fieldset class="module aligned change-list" id="changelist">
+  <h2>Page sections</h2>
+  {% comment %}
+  <form action="" method="post">{% csrf_token %}
+    <div class="actions">
+      Action:
+      <select name="action">
+        <option value="">---------</option>
+        <option value="edit">{{ _("Edit") }}</option>
+      </select>
+      <input type="submit" value="{{ _("Go") }}" />
+    </div>
+  {% endcomment %}
+    <table>
+      <thead>
+        <tr>
+          {% comment %}
+          <th class="action-checkbox-column">
+            <input type="checkbox" id="toggler" />
+          </th>
+          {% endcomment %}
+          <th>Name</th><th>Section</th><th>Description</th><th>Done</th>
+          {% if perms.cms.add_value and perms.cms.change_value %}
+          <th>Actions</th>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody>
+      {% for name, section in page.tpl.iteritems %}
+        <tr class="{% cycle "row1" "row2" %}">
+          {% comment %}
+          <td><input type="checkbox" name="section" value="{{ name|escape }}" /></td>
+          {% endcomment %}
+          <td>{{ name|title }}</td>
+          <td>{{ section.NAME }}</td>
+          <td>{{ section.DESCRIPTION }}</td>
+          <td><span class="completed">{{ section.done_percent }}%</span></td>
+          {% if perms.cms.add_value and perms.cms.change_value %}
+          <td class="actions-links">
+            <a title="Edit" href="{{ section.basename }}/"><img src="{% url cms_media "img/edit.png" %}" alt="Edit" /></a>
+          </td>
+          {% endif %}
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {% comment %}
+  </form>
+  {% endcomment %}
+</fieldset>
+{% endblock %}

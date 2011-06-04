@@ -1,0 +1,16 @@
+{% for field in form %}
+  {% if not field.is_hidden %}
+    <div class="form-row">
+      {% if field.errors %}{{ field.errors }} {% else %}<ul class="errorlist" style="display: none;"></ul>{% endif %}
+      <label{% if field.required %} class="required"{% endif %} for="{{ field.auto_id }}">{{ field.label }}:</label> {{ field }}
+    </div>
+  {% endif %}
+{% endfor %}
+{% for field in form %}
+  {% if field.is_hidden %} {{ field }} {% endif %}
+{% endfor %}
+<div class="form-row">
+    <input class="submit-button" type="submit" value="Save" />
+    <span class="loading" style="display: none;">{{ _("Loading") }}</span>
+    <span class="saved" style="display: none;"><span>{{ _("Saved") }}</span>
+</div>

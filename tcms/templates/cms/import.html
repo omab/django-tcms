@@ -1,0 +1,29 @@
+{% extends "cms/cms_base.html" %}
+{% load adminmedia %}
+
+{% block extra_title %}Import page{% endblock %}
+
+{% block extrastyle %}
+<link href="{% admin_media_prefix %}css/forms.css" rel="stylesheet" type="text/css" media="all" />
+{% endblock %}
+
+{% block extra_breadcrumbs %}
+&rsaquo; Import
+{% endblock %}
+
+{% block content_title %}
+<h1>Import page</h1>
+{% endblock %}
+
+{% block content %}
+<fieldset class="module aligned">
+  <h2>Import a page</h2>
+  {% if perms.cms.add_path and perms.cms.add_page and perms.cms.add_value %}
+  <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+    {% include "cms/form_fields.html" %}
+  </form>
+  {% else %}
+  <p>Sorry, but you don't have permissions for this action</p>
+  {% endif %}
+</fieldset>
+{% endblock %}

@@ -1,0 +1,122 @@
+{% extends "cms/cms_base.html" %}
+{% load adminmedia %}
+
+{% block extra_title %}Edit section{% endblock %}
+
+{% block extrastyle %}
+<link href="{% admin_media_prefix %}css/forms.css" rel="stylesheet" type="text/css" media="all" />
+{# cms css files #}
+<link href="{% url cms_media "css/cms.css" %}" rel="stylesheet" type="text/css" media="all" />
+<link href="{% url cms_media "css/fancybox.css" %}" rel="stylesheet" type="text/css" media="all" />
+{% endblock %}
+
+{% block extrahead %}
+<script type="text/javascript" src="{% admin_media_prefix %}js/core.js"></script>
+<script type="text/javascript" src="{% url admin:jsi18n %}"></script>
+<script type="text/javascript" src="{% admin_media_prefix %}js/jquery.min.js"></script>
+<script type="text/javascript" src="{% admin_media_prefix %}js/admin/RelatedObjectLookups.js"></script>
+<script type="text/javascript" src="{% admin_media_prefix %}js/calendar.js"></script>
+<script type="text/javascript" src="{% admin_media_prefix %}js/admin/DateTimeShortcuts.js"></script>
+{# cms JS files #}
+<script type="text/javascript" src="{% url cms_media "js/ckeditor/ckeditor_source.js" %}"></script>
+<script type="text/javascript" src="{% url cms_media "js/ckeditor/adapters/jquery.js" %}"></script>
+
+<script type="text/javascript">
+    var ckeditorConfig = "{% url cms_media "js/ckeditor_config.js" %}";
+</script>
+
+<script type="text/javascript" src="{% url cms_media "js/ckeditor_config.js" %}"></script>
+<script type="text/javascript" src="{% url cms_media "js/cms.js" %}"></script>
+<script type="text/javascript" src="{% url cms_media "js/jquery.form.js" %}"></script>
+<script type="text/javascript" src="{% url cms_media "js/jquery.mousewheel.js" %}"></script>
+<script type="text/javascript" src="{% url cms_media "js/jquery.fancybox.js" %}"></script>
+{% endblock %}
+
+{% block extra_breadcrumbs %}
+&rsaquo; <a href="../">{{ page.path|escape }}</a>
+&rsaquo; {{ section_name|title }}
+{% endblock %}
+
+{% block content_title %}
+<h1>Edit section: {{ section_name|title }}</h1>
+{% endblock %}
+
+{% block content %}
+{% block object-tools %}
+<ul class="object-tools">
+  <li><a href="{{ page.preview_url }}" target="_blank">Preview</a></li>
+  {% if perms.cms.add_page %}
+  <li><a href="../copy/">Copy</a></li>
+  {% endif %}
+  <li><a href="../export/">Export</a></li>
+  {% if page.is_live %}
+    {% if perms.cms.add_rendered and perms.cms.change_rendered %}
+    <li><a href="../refresh/">Refresh content</a></li>
+    {% endif %}
+    {% if perms.cms.change_page %}
+    <li><a href="../unpublish/">Unpublish</a></li>
+    {% endif %}
+  {% else %}
+    {% if perms.cms.change_page and perms.cms.add_rendered and perms.cms.change_rendered %}
+    <li><a href="../publish/">Publish</a></li>
+    {% endif %}
+    {% if perms.cms.delete_page %}
+    <li><a class="warning" href="../delete/">Delete</a></li>
+    {% endif %}
+  {% endif %}
+  <li><a href="../../../{{ page.id }}/history/">History</a></li>
+</ul>
+{% endblock %}
+
+<h3>Information</h3>
+<fieldset class="module aligned">
+  <div class="container">
+    <h2 class="title collapsed">
+      Page (<a id="link_page_info" class="collapse" href="#"><span class="label" style="display: none;">Hide</span><span class="label">Show</span></a>)
+    </h2>
+    <div id="container_page_info" style="display: none;">
+      <div class="form-row">
+        <label>URL:</label> {{ page.path }}
+      </div>
+      <div class="form-row">
+        <label>State:</label> {{ state }}
+      </div>
+      <div class="form-row">
+        <label>Updated:</label> {{ page.updated|date:"d M Y" }}
+      </div>
+    </div>
+  </div>
+</fieldset>
+
+<fieldset class="module aligned">
+  <div class="container">
+    <h2 class="title">
+      Section (<a id="link_section_info" class="collapse" href="#"><span class="label">Hide</span><span class="label" style="display: none;">Show</span></a>)
+    </h2>
+    <div id="container_section_info">
+      <div class="form-row">
+        <label>Name:</label> {{ section_name|title }}
+      </div>
+      <div class="form-row">
+        <label>Section:</label> {{ section.NAME }}
+      </div>
+      <div class="form-row">
+        <label>Description:</label> {{ section.DESCRIPTION }}
+      </div>
+      <div class="form-row">
+        <label>Done:</label>
+        <span class="completed">{{ section.done_percent }}%</span>
+      </div>
+    </div>
+  </div>
+</fieldset>
+
+<h3>Section fragments</h3>
+{% if perms.cms.add_value and perms.cms.change_value %}
+{% for data in section.inc_form %}
+  {% include data.tpl %}
+{% endfor %}
+{% else %}
+<p>Sorry, but you don't have permissions for this action</p>
+{% endif %}
+{% endblock %}

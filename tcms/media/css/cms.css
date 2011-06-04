@@ -1,0 +1,21 @@
+label {text-transform: capitalize;}
+h2.collapsed { background-image: url(/admin-media/img/admin/nav-bg.gif); background-position: bottom left; color: #999; }
+.child {margin: 0.6em;}
+.form-row img, .form-row input {vertical-align: top;}
+a.file-preview {display: inline-block; padding-bottom: 0.5em; border-bottom: 1px solid #5B80B2;}
+.vTextField {width: 90%;}
+.actions-links a {font-weight: bold;}
+#changelist table tbody td:first-child {text-align: left !important;}
+.position {float: right; font-size: .8em; color: #999; padding: 0.6em 0.6em 0 0;}
+.clear-form {float: right; position: relative; bottom: 34px; right: 24px; left: auto;}
+.clone-link {position: relative; bottom: 70px; left: 18em;}
+.completed {font-weight: bold;}
+a.warning {color: red;}
+.cke_skin_kama {margin-left: 9.7em;}
+.cke_skin_kama .cke_editor {display: table !important;}
+.richedit {display: block; margin-left: 9.7em;}
+p.datetime {display: inline-block; font-weight: normal;}
+#toggler {margin-left: -2px !important; display: inline-block;}
+.loading {background: url(/cms-media/img/loading.gif) no-repeat scroll 0 0 transparent; width: 16px; height: 11px;
+          text-indent: -10000px; position: absolute; margin-top: 6px; margin-left: 10px; display: none;}
+.saved {margin-top: 5px; font-weight: bold; font-size: 13px; color: #666; display: inline-block;}

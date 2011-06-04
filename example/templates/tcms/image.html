@@ -1,0 +1,1 @@
+{% if obj.image %}<img{% if obj.image.title %} title="{{ obj.image.title|escape }}"{% endif %}{% if obj.image.alt %} alt="{{ obj.image.alt|escape }}"{% endif %} src="{{ obj.image.image.url }}" />{% endif %}

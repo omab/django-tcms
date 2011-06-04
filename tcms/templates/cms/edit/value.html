@@ -1,0 +1,13 @@
+{% extends "cms/edit/base_edit.html" %}
+{% block form_container %}
+<form class="value-form" action="" method="post"{% if data.form.is_multipart %} enctype="multipart/form-data"{% endif %}>{% csrf_token %}
+  {% with data.form as form %}
+    {% include "cms/form_fields.html" %}
+  {% endwith %}
+</form>
+
+<form action="clear/" method="post" class="clear-form">{% csrf_token %}
+  {{ data.form.basename }}
+  <input class="warning" type="submit" value="Delete" />
+</form>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "admin/object_history.html" %}
+{% load i18n %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="../../../../">Home</a>
+  &rsaquo; <a href="../../../">{% trans 'Cms' %}</a>
+  &rsaquo; <a href="../../">{% trans 'Pages' %}</a>
+  &rsaquo; <a href="../../p/{{ object.id }}/">{{ object.path|escape }}</a>
+  &rsaquo; {% trans 'History' %}
+</div>
+{% endblock %}

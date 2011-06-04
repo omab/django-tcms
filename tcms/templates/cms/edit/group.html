@@ -1,0 +1,6 @@
+{% extends "cms/edit/base_edit.html" %}
+{% block form_container %}
+  {% for data in data.subforms %}
+    <div class="child">{% include data.tpl %}</div>
+  {% endfor %}
+{% endblock %}

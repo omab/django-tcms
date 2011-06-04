@@ -1,0 +1,62 @@
+{% extends "admin/change_list.html" %}
+{% load i18n adminmedia %}
+
+{% block content_title %}
+<h1>{{ type|title }}</h1>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+  {% block object-tools %}{% endblock %}
+  <div class="module" id="changelist">
+    {% block search %}
+    <div id="toolbar">
+      <form id="changelist-search" action="" method="get">{% csrf_token %}
+        <div><!-- DIV needed for valid HTML --> 
+          <label for="searchbar"><img src="{% admin_media_prefix %}img/admin/icon_searchbox.png" alt="{{ _("Search") }}" /></label> 
+          <input type="text" size="40" name="q" value="{{ q }}" id="searchbar" /> 
+          <input type="submit" value="{{ _("Go") }}" /> 
+          <input type="hidden" name="{{ IS_POPUP_VAR }}" value="1"/> 
+          <input type="hidden" name="type" value="{{ type }}"/> 
+        </div> 
+      </form>
+    </div> 
+    {% endblock %}
+
+    {% block date_hierarchy %}{% endblock %}
+    {% block filters %}{% endblock %}
+
+    {% block result_list %}
+    <table cellspacing="0">
+      <thead><tr>{% for hd in header %}<th>{% trans hd %}</th>{% endfor %}</tr></thead>
+      <tbody>
+      {% for item in items %}
+      <tr class="{% cycle 'row1' 'row2' %}">
+        {% for attr in item %}
+        {% if forloop.first %}
+          <th><a href="{{ attr }}/" onclick="opener.dismissRelatedLookupPopup(window, '{{ attr }}'); return false;">{{ attr }}</a></th>
+        {% else %}
+          <td>{{ attr }}</td>
+        {% endif %}
+        {% endfor %}
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% endblock %}
+
+    {% block pagination %}
+    <p class="paginator">
+    {% for i in page_range %}
+      {% ifequal i page %}
+        <span class="this-page">{{ i|add:1 }}</span>
+      {% else %}
+        <a href="?q={{ q }}&p={{ i }}">{{ i|add:1 }}</a>
+      {% endifequal %}
+    {% endfor %}
+    {{ result_count }}
+    </p>
+    {% endblock %}
+  </div>
+</div>
+{% endblock %}

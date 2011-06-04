@@ -1,0 +1,60 @@
+{% extends "cms/cms_base.html" %}
+{% load adminmedia %}
+
+{% block extra_title %}Copy page{% endblock %}
+
+{% block extrastyle %}
+<link href="{% admin_media_prefix %}css/forms.css" rel="stylesheet" type="text/css" media="all" />
+<link href="{% url cms_media "css/cms.css" %}" rel="stylesheet" type="text/css" media="all" />
+{% endblock %}
+
+{% block extrahead %}
+<script type="text/javascript" src="{% admin_media_prefix %}js/admin/RelatedObjectLookups.js"></script>
+{% endblock %}
+
+{% block extra_breadcrumbs %}
+&rsaquo; <a href="../">{{ page.path|escape }}</a>
+&rsaquo; Copy
+{% endblock %}
+
+{% block content_title %}
+<h1>Copy page: {{ page.path }}</h1>
+{% endblock %}
+
+{% block content %}
+<fieldset class="module aligned">
+  <h2>Original page data</h2>
+  <div class="form-row">
+    <label>Path:</label> {{ page.path }}
+  </div>
+  <div class="form-row">
+    <label>State:</label> {{ page.get_state_display }}
+  </div>
+  <div class="form-row">
+    <label>Language:</label> {{ page.path.get_locale_display }}
+  </div>
+  <div class="form-row">
+    <label>Description:</label> {{ page.description }}
+  </div>
+
+  <h2>Template data</h2>
+  <div class="form-row">
+    <label>Name:</label> {{ page.tpl.NAME }}
+  </div>
+  <div class="form-row">
+    <label>Description:</label> {{ page.tpl.DESCRIPTION }}
+  </div>
+</fieldset>
+
+<fieldset class="module aligned">
+  <h2>New copy data</h2>
+  {% if perms.cms.add_page %}
+  <form action="" method="post">{% csrf_token %}
+    {% include "cms/form_fields.html" %}
+    <a class="clone-link" href="#" onclick="javascript: id_path.value = '{{ page.path.id }}'; return false;">Same url (clone)</a>
+  </form>
+  {% else %}
+  <p>Sorry, but you don't have permissions for this action</p>
+  {% endif %}
+</fieldset>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "admin/change_list.html" %}
+{% load i18n adminmedia admin_list cms_tags %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link href="{% url cms_media "css/cms.css" %}" rel="stylesheet" type="text/css" media="all" />
+{% endblock %}
+
+{% block extrahead %}
+<script type="text/javascript" src="{% admin_media_prefix %}js/jquery.min.js"></script>
+<script type="text/javascript" src="{% url cms_media "js/cms.js" %}"></script>
+{% endblock %}
+
+
+{% block object-tools %}
+{% if has_add_permission %}
+  <ul class="object-tools">
+    {% if perms.cms.add_path and perms.cms.add_page and perms.cms.add_value %}
+    <li><a href="import/{% if is_popup %}?_popup=1{% endif %}" class="addlink">Import</a></li>
+    {% endif %}
+    <li>
+      <a href="add/{% if is_popup %}?_popup=1{% endif %}" class="addlink">
+        {% blocktrans with cl.opts.verbose_name as name %}Add {{ name }}{% endblocktrans %}
+      </a>
+    </li>
+  </ul>
+{% endif %}
+{% endblock %}
+
+{% block filters %}
+{% if cl.has_filters %}
+<div id="changelist-filter">
+  <h2>{% trans 'Filter' %}</h2>
+  {% for spec in cl.filter_specs %}
+     {% admin_list_filter cl spec %}
+  {% endfor %}
+  {% admin_list_filter cl locale_filter %}
+  {% admin_template_filter cl template_filter %}
+</div>
+{% endif %}
+{% endblock %}

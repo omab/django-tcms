@@ -1,0 +1,12 @@
+{% extends "cms/edit/base_edit.html" %}
+{% block form_container %}
+  {% for data in data.subforms %}
+  <div class="child">
+    <span class="position">#{{ forloop.counter }}</span>
+    {% include data.tpl %}
+  </div>
+  {% endfor %}
+  {% if data.with_extra_form %}
+  <p class="help">More <strong>{{ data.form_title }}</strong> will be added when saving</p>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,20 @@
+{% load i18n %}
+<h3>{% blocktrans with title as filter_title %} By {{ filter_title }} {% endblocktrans %}</h3>
+<ul>
+{% for name, items in choices %}
+  {% if forloop.first %}
+    <li{% if items.0.selected %} class="selected"{% endif %}><a href="{{ items.0.query_string|iriencode }}">{{ items.0.display }}</a></li>
+  {% else %}
+    <li>
+      <strong>{{ name|title }}</strong>
+      <ul>
+      {% for choice in items %}
+        <li{% if choice.selected %} class="selected"{% endif %}>
+          <a href="{{ choice.query_string|iriencode }}">{{ choice.display }}</a>
+        </li>
+      {% endfor %}
+      </ul>
+    </li>
+  {% endif %}
+{% endfor %}
+</ul>

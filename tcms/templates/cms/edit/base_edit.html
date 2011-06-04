@@ -1,0 +1,9 @@
+<div class="module aligned container">
+  <h2 class="title collapsed">
+    {{ data.form_title }}
+    (<a id="link_{{ data.form_id }}" class="collapse" href="#"><span class="label" style="display: none;">Hide</span><span class="label">Show</span></a>)
+  </h2>
+  <div id="container_{{ data.form_id }}" style="display: none;">
+    {% block form_container %}{% endblock %}
+  </div>
+</div>
