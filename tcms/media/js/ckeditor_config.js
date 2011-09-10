@@ -1,5 +1,4 @@
 ﻿CKEDITOR.editorConfig = function(config) {
-    console.log("ACA");
 	config.toolbar_tCMS = [
 		['Source'],
 		['Cut','Copy','Paste','PasteText','PasteFromWord'],
@@ -9,5 +8,4 @@
 		['Bold','Italic','Underline','Strike'],
 		['Styles','Format','TextColor','FontSize','-','RemoveFormat']
 	];
-    console.log("ACA2");
 };
