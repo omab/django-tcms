@@ -1,5 +1,5 @@
 {% extends "cms/cms_base.html" %}
-{% load adminmedia %}
+{% load adminmedia cms_tags %}
 
 {% block extra_title %}Edit section{% endblock %}
 
@@ -18,14 +18,16 @@
 <script type="text/javascript" src="{% admin_media_prefix %}js/calendar.js"></script>
 <script type="text/javascript" src="{% admin_media_prefix %}js/admin/DateTimeShortcuts.js"></script>
 {# cms JS files #}
-<script type="text/javascript" src="{% url cms_media "js/ckeditor/ckeditor_source.js" %}"></script>
-<script type="text/javascript" src="{% url cms_media "js/ckeditor/adapters/jquery.js" %}"></script>
 
+{% if TCMS_CKEDITOR_BASE_URL %}
+<script type="text/javascript" src="{{ TCMS_CKEDITOR_BASE_URL }}ckeditor_source.js"></script>
+<script type="text/javascript" src="{{ TCMS_CKEDITOR_BASE_URL }}adapters/jquery.js"></script>
 <script type="text/javascript">
     var ckeditorConfig = "{% url cms_media "js/ckeditor_config.js" %}";
 </script>
-
 <script type="text/javascript" src="{% url cms_media "js/ckeditor_config.js" %}"></script>
+{% endif %}
+
 <script type="text/javascript" src="{% url cms_media "js/cms.js" %}"></script>
 <script type="text/javascript" src="{% url cms_media "js/jquery.form.js" %}"></script>
 <script type="text/javascript" src="{% url cms_media "js/jquery.mousewheel.js" %}"></script>

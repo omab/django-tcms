@@ -69,3 +69,4 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 TCMS_LOCALIZED = False
 TCMS_PAGES = 'tcms_pages'
+TCMS_CKEDITOR_BASE_URL = '/cms-media/js/ckeditor/'

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.conf import settings
 from django.http import HttpResponse, HttpResponseBadRequest, \
                         HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404, render_to_response
@@ -85,9 +86,12 @@ def edit_section(request, page_id, section):
                 url_hash = basename.replace('/', '-')
                 return HttpResponseRedirect(url + '#' + url_hash)
     page.load(section)
-    section_name = section # used in template
+    section_name = section  # used in template
     section = page.tpl[section_name]
     state = page.get_state_display()
+    TCMS_CKEDITOR_BASE_URL = getattr(settings, 'TCMS_CKEDITOR_BASE_URL', '')
+    if TCMS_CKEDITOR_BASE_URL and not TCMS_CKEDITOR_BASE_URL.endswith('/'):
+        TCMS_CKEDITOR_BASE_URL += '/'
     return _render('cms/edit_section.html', locals(), request)
 
 

@@ -3,3 +3,4 @@
 test.db
 local_settings.py
 build/
+tcms/media/js/ckeditor
