@@ -139,3 +139,4 @@ Check the example_ to see how it works.
 .. _CKEditor: http://ckeditor.com/
 .. _python: http://python.org
 .. _example: https://github.com/omab/django-tcms/tree/master/example
+.. _pypi: http://pypi.python.org/pypi/django-tcms
