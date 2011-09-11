@@ -70,7 +70,6 @@ class Path(models.Model):
         return self.path
 
     class Meta:
-        db_table = 'cms2_path'
         unique_together = ('path', 'locale')
         verbose_name = 'URL'
 
@@ -385,9 +384,6 @@ class Page(models.Model):
     def __str__(self):
         return str(self.path)
 
-    class Meta:
-        db_table = 'cms2_page'
-
 
 class Value(models.Model):
     """CMS Page value
@@ -409,7 +405,6 @@ class Value(models.Model):
         return u'%s (%s)' % (self.name, self.value[:20])
 
     class Meta:
-        db_table = 'cms2_value'
         unique_together = ('page', 'name')
 
 
@@ -420,5 +415,4 @@ class Rendered(models.Model):
     value = models.TextField()
 
     class Meta:
-        db_table = 'cms2_rendered'
         unique_together = ('page', 'name')
