@@ -1,0 +1,3 @@
+include *.rst
+recursive-include tcms/media *.css *.js *.png *.gif
+recursive-include tcms/templates *.html
