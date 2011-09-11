@@ -11,7 +11,7 @@ from django.db.models.fields.files import ImageFieldFile
 from django.utils.datastructures import DotExpandedDict
 
 
-CACHE_NAME = getattr(settings, 'TCMS_CACHE_NAME', 'cms')
+CACHE_NAME = getattr(settings, 'TCMS_CACHE_NAME', 'tcms')
 
 # Capital letters regex
 CAPLETTERS = re.compile('([A-Z])')
