@@ -11,9 +11,8 @@ from django.utils.safestring import mark_safe
 from django.utils.importlib import import_module
 from django.core.exceptions import ValidationError
 
-from tcms.settings import IMAGES_UPLOAD_TO, CMSID, RENDER_EXTRA_CONTEXT
 from tcms.data_types import BASE_TYPES
-from tcms.tpl import PAGES
+from tcms.tpl import PAGES, RENDER_EXTRA_CONTEXT
 from tcms.utils import save_b64_image, image_to_b64, update_cache, \
                        normalize_path, dotted_dict_to_choices
 
@@ -35,6 +34,10 @@ else:
 
 TYPES_MAP = dict((Type.__name__.lower(), Type)
                     for Type in BASE_TYPES + LOCAL_TYPES)
+
+CMSID = 'cmsid'
+IMAGES_UPLOAD_TO = getattr(settings, 'TCMS_IMAGES_UPLOAD_TO',
+                           'cms/image/%Y/%m/%d')
 
 
 class Path(models.Model):
@@ -122,7 +125,7 @@ class Page(models.Model):
 
     @property
     def preview_url(self):
-        return '%s?%s=%s&cms_locale=%s' % (self.path.path, CMSID, self.id,
+        return '%s?%s=%s&cms_locale=%s' % (self.path.path, CMSID, self.pk,
                                            self.path.locale)
 
     @property

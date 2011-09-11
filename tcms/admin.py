@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.contrib import admin
 from django.http import HttpResponseRedirect
 from django.conf.urls.defaults import url, patterns
@@ -8,7 +9,6 @@ from django.utils.encoding import smart_unicode
 from django.views.generic.simple import redirect_to
 
 from tcms import views
-from tcms.settings import CMS_ADMIN
 from tcms.models import Path, Page, Value
 from tcms.utils import update_cache
 
@@ -119,16 +119,19 @@ class PageOptions(admin.ModelAdmin):
             '<a title="Preview" target="_blank" href="%(preview)s"><img src="%(media)s/preview.png" alt="Preview" /></a>']
         if obj.is_live:
             links += [
-                '<a title="Refresh" href="p/%(id)s/refresh/?next=%(admin)s"><img src="%(media)s/refresh.png" alt="Refresh" /></a>',
-                '<a title="Unpublish" href="p/%(id)s/unpublish/?next=%(admin)s"><img src="%(media)s/unpublish.png" alt="Unpublish" /></a>',
+                '<a title="Refresh" href="p/%(id)s/refresh/?next=%(next)s"><img src="%(media)s/refresh.png" alt="Refresh" /></a>',
+                '<a title="Unpublish" href="p/%(id)s/unpublish/?next=%(next)s"><img src="%(media)s/unpublish.png" alt="Unpublish" /></a>',
                 '<img src="%(media)s/delete_disabled.png" title="Delete" alt="Delete" />']
         else:
             links += [
                 '<img title="Refresh" src="%(media)s/refresh_disabled.png" alt="Refresh" />',
-                '<a title="Publish" href="p/%(id)s/publish/?next=%(admin)s"><img src="%(media)s/publish.png" alt="Publish" /></a>',
+                '<a title="Publish" href="p/%(id)s/publish/?next=%(next)s"><img src="%(media)s/publish.png" alt="Publish" /></a>',
                 '<a title="Delete" href="p/%(id)s/delete/" class="warning"><img src="%(media)s/delete.png" alt="Delete" /></a>']
         links.append('<a title="History" href="%(id)s/history/"><img src="%(media)s/log.png" alt="History" /></a>')
-        return ' '.join(links) % {'id': obj.id, 'media': '/cms-media/img', 'preview': obj.preview_url, 'admin': CMS_ADMIN}
+        return ' '.join(links) % {'id': obj.id,
+                                  'media': '/cms-media/img',
+                                  'preview': obj.preview_url,
+                                  'next': reverse('admin:tcms_page_changelist')}
     page_actions.allow_tags = True
     page_actions.short_description = 'Actions'
 

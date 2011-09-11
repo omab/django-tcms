@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 
-from tcms.models import Page
-from tcms.settings import CMSID
+from tcms.models import Page, CMSID
 from tcms.utils import id_from_cache
 
 

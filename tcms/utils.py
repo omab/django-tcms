@@ -10,8 +10,8 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db.models.fields.files import ImageFieldFile
 from django.utils.datastructures import DotExpandedDict
 
-from tcms.settings import SEP, CMS_CACHENAME
 
+CACHE_NAME = getattr(settings, 'TCMS_CACHE_NAME', 'cms')
 
 # Capital letters regex
 CAPLETTERS = re.compile('([A-Z])')
@@ -22,11 +22,6 @@ def human_title(value):
                         for word in CAPLETTERS.sub(r' \1', value)\
                                               .replace('_', ' ')\
                                               .split())
-
-
-def mkbasename(*values):
-    """Creates basenames for forms"""
-    return SEP.join(values)
 
 
 def update_cache():
@@ -42,7 +37,7 @@ def update_cache():
     else:
         values = dict(((page.path.path, page.state), page.id)
                             for page in pages)
-    cache.set(CMS_CACHENAME, values)
+    cache.set(CACHE_NAME, values)
     return values
 
 
@@ -65,7 +60,7 @@ def id_from_cache(paths, locale=None):
     withing LIVE and WIP states."""
     from tcms.models import WIP, LIVE
 
-    values = cache.get(CMS_CACHENAME)
+    values = cache.get(CACHE_NAME)
     if values is None: # load cache if not entry
         values = update_cache()
 

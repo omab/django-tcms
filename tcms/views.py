@@ -2,6 +2,7 @@
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseBadRequest, \
                         HttpResponseRedirect, Http404
+from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render_to_response
 from django.utils import simplejson, html
 from django.utils.encoding import force_unicode
@@ -13,7 +14,6 @@ from django.contrib.admin.views.main import IS_POPUP_VAR, SEARCH_VAR
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.decorators import user_passes_test
 
-from tcms.settings import CMS_ADMIN
 from tcms.models import Page, TYPES_MAP
 from tcms.data_types import RawIdType
 from tcms.forms import PageForm, CopyPageForm, ImportForm
@@ -186,7 +186,7 @@ def delete(request, page_id):
         update_cache()
         log(request, page, DELETION, 'Page deleted')
         messages.info(request, 'Page %s deleted' % page)
-        return HttpResponseRedirect(CMS_ADMIN)
+        return HttpResponseRedirect(reverse('admin:tcms_page_changelist'))
 
 
 def export(request, page_id):
@@ -246,7 +246,7 @@ def render_to_template(request, context=None):
 
 def _edit_url(page_id):
     """Return edition url for @page_id"""
-    return CMS_ADMIN + 'p/%s/' % page_id
+    return reverse('admin:cms_edit', args=(page_id,))
 
 def _edit_section_url(page_id, section):
     """Return section edition url for @page_id/@section"""

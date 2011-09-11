@@ -4,12 +4,13 @@ Page template data types definitions. Here are defined custom data types
 with it's corresponding behavior to interact with the CMS. Project models
 can be added and will work in a raw_id way.
 """
+from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.forms import ChoiceField, BooleanField
 from django.utils.safestring import mark_safe
 from django.db.models.loading import get_model
 
-from tcms.settings import IMAGES_UPLOAD_TO, BASE_ADMIN
 from tcms.utils import save_b64_image, image_to_b64
 from tcms.fields import RelatedWidget, AdminCharField, PreviewImageField, \
                         RichTexareaField, AdminDateField, AdminDateTimeField
@@ -17,6 +18,8 @@ from tcms.fields import RelatedWidget, AdminCharField, PreviewImageField, \
 
 __all__ = ['BaseType', 'PlainType', 'RawIdType', 'Text', 'BigText', 'Option',
            'Flag', 'Image', 'Date', 'DateTime', 'BASE_TYPES']
+
+IMAGES_UPLOAD_TO = getattr(settings, 'TCMS_IMAGES_UPLOAD_TO', 'cms/image/%Y/%m/%d')
 
 
 class BaseType(object):
@@ -102,7 +105,8 @@ class RawIdType(PlainType):
                 app_label, name = self.model.split('.', 1)
                 model = get_model(app_label, name)
             opt = model._meta
-            url = '/'.join((BASE_ADMIN, opt.app_label, opt.module_name))
+            url = reverse('admin:%s_%s_changelist' % (opt.app_label,
+                                                      opt.module_name))
         else:
             raise AttributeError, 'model or url must be defined'
         return self.field(widget=RelatedWidget(url), *args, **kwargs)

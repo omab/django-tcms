@@ -10,11 +10,13 @@ from django.template import loader, Context
 from django.utils.datastructures import SortedDict
 from django.utils.safestring import mark_safe
 
-from tcms.settings import SEP, RENDER_EXTRA_CONTEXT
 from tcms.data_types import BaseType
-from tcms.utils import human_title, mkbasename
+from tcms.utils import human_title
 from tcms.exceptions import TemplateFormValidationError
 
+
+RENDER_EXTRA_CONTEXT = getattr(settings, 'TCMS_RENDER_EXTRA_CONTEXT', {})
+SEP = '/'
 
 class Page(SortedDict):
     """
@@ -65,7 +67,7 @@ class Page(SortedDict):
         # group values per section
         grouped = defaultdict(list)
         for name, value in values:
-            section, name = name.split(SEP, 1)
+            section, name = split_basename(name, 1)
             grouped[section].append((name, value))
 
         # load values on each section
@@ -146,7 +148,7 @@ class Page(SortedDict):
             for c in f.cmscontentmapping_set.all():
                 obj = c.object
                 if isinstance(obj, (CmsTextContent, CmsImageContent)):
-                    name = SEP.join((f.name, c.name))
+                    name = mkbasename(f.name, c.name)
                     if name in names: # do not process repeated values
                         continue
                     names.append(name)
@@ -156,16 +158,16 @@ class Page(SortedDict):
                     if isinstance(obj, CmsImageContent):
                         alt, credits = obj.alt, obj.credits
                         if alt:
-                            try_save(SEP.join((name, 'alt')), alt.strip())
+                            try_save(mkbasename(name, 'alt'), alt.strip())
                         if credits:
-                            try_save(SEP.join((name, 'credits')), credits.strip())
+                            try_save(mkbasename(name, 'credits'), credits.strip())
         page.publish()
         return page
 
     def save(self, page, basename, *args, **kwargs):
         """Save method. Will delegate save functionality to it's
         corresponding section."""
-        name, subname = basename.split(SEP, 1)
+        name, subname = split_basename(basename, 1)
         return self[name].save(page, subname, *args, **kwargs)
 
     def render_sections(self, *args, **kwargs):
@@ -212,7 +214,7 @@ class Section(SortedDict):
         # group values by part name
         grouped = defaultdict(list)
         for name, value in values:
-            part, name = name.split(SEP, 1)
+            part, name = split_basename(name, 1)
             grouped[part].append((name, value))
 
         # delegate values loading to each section part
@@ -224,7 +226,7 @@ class Section(SortedDict):
         # get name, subname from basename, parts that are Value instance
         # directly will lack of a subname.
         try:
-            name, subname = basename.split(SEP, 1)
+            name, subname = split_basename(basename, 1)
         except ValueError:
             name, subname = basename, None
         return self[name].save(page, subname, *args, **kwargs)
@@ -478,7 +480,7 @@ class Group(FieldSet):
         # group by name
         grouped = defaultdict(list)
         for name, value in values:
-            name, subname = name.split(SEP, 1)
+            name, subname = split_basename(name, 1)
             grouped[name].append((subname, value))
 
         # load values into each sub fieldset
@@ -497,7 +499,7 @@ class Group(FieldSet):
     def save(self, page, basename, *args, **kwargs):
         """Save handler"""
         try:
-            name, subname = basename.split(SEP, 1)
+            name, subname = split_basename(basename, 1)
         except ValueError:
             name, subname = basename, None
         return self.fields[name].save(page, subname, *args, **kwargs)
@@ -529,7 +531,7 @@ class Several(FieldSet):
         # group values by position and name
         grouped = defaultdict(list)
         for name, value in values:
-            pos, base_name, subname = name.split(SEP, 2)
+            pos, base_name, subname = split_basename(name, 2)
             grouped[(pos, base_name)].append((subname, value))
 
         # Clone sub fields and load data into them for each position
@@ -567,9 +569,9 @@ class Several(FieldSet):
     def save(self, page, basename, *args, **kwargs):
         """Save handler, will delegate saving into sub fieldset"""
         try:
-            pos, name, subname = basename.split(SEP, 2)
+            pos, name, subname = split_basename(basename, 2)
         except ValueError:
-            (pos, name), subname = basename.split(SEP, 1), None
+            (pos, name), subname = split_basename(basename, 1), None
         return self.fields[name].save(page, subname, *args, **kwargs)
 
     def done_percent(self):
@@ -592,6 +594,16 @@ class Several(FieldSet):
         return self.loaded and \
                any(map(lambda item: any(map(bool, item[1].values())),
                        self.data))
+
+
+def mkbasename(*values):
+    """Creates basenames for forms"""
+    return SEP.join(values)
+
+
+def split_basename(value, maxsplit):
+    """Splits form basenames"""
+    return value.split(SEP, maxsplit)
 
 
 def _reduce_pairs(left, right):

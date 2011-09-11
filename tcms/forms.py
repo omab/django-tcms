@@ -3,7 +3,7 @@ from django import forms
 from django.contrib.admin.widgets import AdminFileWidget
 
 from tcms.models import Page, Path, Value, WIP
-from tcms.utils import mkbasename
+from tcms.tpl import mkbasename
 from tcms.fields import PathWidget, AdminTexareaField, AdminCharField
 
 
