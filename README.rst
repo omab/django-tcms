@@ -118,7 +118,7 @@ Localization
 If your site support multiple languages, you will want to create pages on every
 language.
 
-tCMS_ uses Django LANGUALES when searching for supported languages, but allows
+tCMS_ uses Django LANGUAGES when searching for supported languages, but allows
 you to create global language pages, for example if you support ``en-gb`` and
 ``en-us`` locales, it's possible to define a page with locale ``en`` and it
 will be used to server the same content for users requesting for one or other
