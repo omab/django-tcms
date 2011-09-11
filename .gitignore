@@ -3,4 +3,6 @@
 test.db
 local_settings.py
 build/
+dist/
+django_tcms.egg-info/
 tcms/media/js/ckeditor
