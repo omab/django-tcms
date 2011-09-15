@@ -1,5 +1,5 @@
 label {text-transform: capitalize;}
-h2.collapsed { background-image: url(/admin-media/img/admin/nav-bg.gif); background-position: bottom left; color: #999; }
+h2.collapsed { background-image: url(../img/nav-bg.gif); background-position: bottom left; color: #999; }
 .child {margin: 0.6em;}
 .form-row img, .form-row input {vertical-align: top;}
 a.file-preview {display: inline-block; padding-bottom: 0.5em; border-bottom: 1px solid #5B80B2;}
@@ -16,6 +16,6 @@ a.warning {color: red;}
 .richedit {display: block; margin-left: 9.7em;}
 p.datetime {display: inline-block; font-weight: normal;}
 #toggler {margin-left: -2px !important; display: inline-block;}
-.loading {background: url(/cms-media/img/loading.gif) no-repeat scroll 0 0 transparent; width: 16px; height: 11px;
+.loading {background: url(../img/loading.gif) no-repeat scroll 0 0 transparent; width: 16px; height: 11px;
           text-indent: -10000px; position: absolute; margin-top: 6px; margin-left: 10px; display: none;}
 .saved {margin-top: 5px; font-weight: bold; font-size: 13px; color: #666; display: inline-block;}
