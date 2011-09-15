@@ -6,3 +6,5 @@ build/
 dist/
 django_tcms.egg-info/
 tcms/media/js/ckeditor
+example/static/
+example/media/cms/

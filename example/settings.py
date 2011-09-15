@@ -27,7 +27,7 @@ USE_I18N = True
 USE_L10N = True
 
 MEDIA_ROOT = join(ROOT_PATH, 'media')
-ADMIN_MEDIA_PREFIX = '/admin-media/'
+ADMIN_MEDIA_PREFIX = '/static/'
 MEDIA_URL = '/media/'
 
 SECRET_KEY = '0@u_p&@gs^imefrk54_pj$26tqw+wqp!m*v$%eu-b9o7*n!kbj'
@@ -58,6 +58,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.admin',
+    'django.contrib.staticfiles',
     'tcms',
 )
 
@@ -70,3 +71,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 TCMS_LOCALIZED = False
 TCMS_PAGES = 'tcms_pages'
 TCMS_CKEDITOR_BASE_URL = '/media/js/ckeditor/'
+
+STATIC_URL = '/static/'
+STATIC_ROOT = join(ROOT_PATH, 'static')
+ADMIN_MEDIA_PREFIX = join(STATIC_URL, 'admin/')

@@ -1,0 +1,7 @@
+{% if obj.dots %}
+<ul>
+    {% for dot in obj.dots %}
+        <li>{{ dot.text }}</li>
+    {% endfor %}
+</ul>
+{% endif %}

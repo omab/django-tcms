@@ -1,5 +1,5 @@
 from tcms.data_types import BigText, Text, Image
-from tcms.tpl import Page, Section, Single, Value
+from tcms.tpl import Page, Several, Section, Single, Value
 
 
 class SimpleText(Section):
@@ -32,6 +32,15 @@ class Img(Section):
                                            'alt', 'credits'))
 
 
+class Dots(Section):
+    NAME = 'Dots list'
+    DESCRIPTION = 'Dots list'
+    template = 'tcms/dots.html'
+
+    def set_fields(self):
+        self['dots'] = Several(text=Single(text=Text()))
+
+
 class Static(Page):
     NAME = 'Simple static page'
     DESCRIPTION = 'Use this template simple static page with big HTML block'
@@ -42,6 +51,7 @@ class Static(Page):
         self['intro'] = HTMLText()
         self['content'] = HTMLText()
         self['image'] = Img()
+        self['dots'] = Dots()
 
 
 PAGE = Static
