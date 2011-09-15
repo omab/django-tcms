@@ -21,9 +21,10 @@ class ValueOptions(admin.ModelAdmin):
 
 
 class PathOptions(admin.ModelAdmin):
-    list_display = ('id', 'path', 'locale')
+    list_display = ('id', 'path') + (('locale',) if settings.TCMS_LOCALIZED else ())
     search_fields = ('path',)
-    list_filter = ('locale',)
+    list_filter = ('locale',) if settings.TCMS_LOCALIZED else ()
+    exclude = ('locale',) if not settings.TCMS_LOCALIZED else ()
 
 
 class LocaleFilterSpec(RelatedFilterSpec):
@@ -59,7 +60,8 @@ class TemplateFilterSpec(ChoicesFilterSpec):
 
 
 class PageOptions(admin.ModelAdmin):
-    list_display = ('id', 'path', 'state', 'locale', 'short_updated', 'page_actions')
+    list_display = ('id', 'path', 'state', 'short_updated', 'page_actions') + \
+                        (('locale',) if settings.TCMS_LOCALIZED else ())
     list_filter = ('state', 'updated')
     search_fields = ('description', 'path__path')
     list_display_links = ()
@@ -88,7 +90,7 @@ class PageOptions(admin.ModelAdmin):
                super(PageOptions, self).lookup_allowed(key, value)
 
     def changelist_view(self, request, extra_context=None):
-        ctx = {'locale_filter': LocaleFilterSpec(request, self),
+        ctx = {'locale_filter': LocaleFilterSpec(request, self) if settings.TCMS_LOCALIZED else None,
                'template_filter': TemplateFilterSpec(request, self)}
         if extra_context:
             ctx.update(extra_context)

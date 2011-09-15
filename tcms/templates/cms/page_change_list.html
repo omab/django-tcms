@@ -37,7 +37,9 @@
   {% for spec in cl.filter_specs %}
      {% admin_list_filter cl spec %}
   {% endfor %}
-  {% admin_list_filter cl locale_filter %}
+  {% if locale_filter %}
+    {% admin_list_filter cl locale_filter %}
+  {% endif%}
   {% admin_template_filter cl template_filter %}
 </div>
 {% endif %}
