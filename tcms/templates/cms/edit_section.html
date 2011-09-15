@@ -20,7 +20,7 @@
 {# cms JS files #}
 
 {% if TCMS_CKEDITOR_BASE_URL %}
-<script type="text/javascript" src="{{ TCMS_CKEDITOR_BASE_URL }}ckeditor_source.js"></script>
+<script type="text/javascript" src="{{ TCMS_CKEDITOR_BASE_URL }}ckeditor.js"></script>
 <script type="text/javascript" src="{{ TCMS_CKEDITOR_BASE_URL }}adapters/jquery.js"></script>
 <script type="text/javascript">
     var ckeditorConfig = "{% get_static_prefix %}js/ckeditor_config.js";
