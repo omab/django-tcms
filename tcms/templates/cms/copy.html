@@ -1,11 +1,11 @@
 {% extends "cms/cms_base.html" %}
-{% load adminmedia %}
+{% load adminmedia static %}
 
 {% block extra_title %}Copy page{% endblock %}
 
 {% block extrastyle %}
 <link href="{% admin_media_prefix %}css/forms.css" rel="stylesheet" type="text/css" media="all" />
-<link href="{% url cms_media "css/cms.css" %}" rel="stylesheet" type="text/css" media="all" />
+<link href="{% get_static_prefix %}css/cms.css" rel="stylesheet" type="text/css" media="all" />
 {% endblock %}
 
 {% block extrahead %}

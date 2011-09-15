@@ -1,13 +1,13 @@
 {% extends "cms/cms_base.html" %}
-{% load adminmedia cms_tags %}
+{% load adminmedia cms_tags static %}
 
 {% block extra_title %}Edit section{% endblock %}
 
 {% block extrastyle %}
 <link href="{% admin_media_prefix %}css/forms.css" rel="stylesheet" type="text/css" media="all" />
 {# cms css files #}
-<link href="{% url cms_media "css/cms.css" %}" rel="stylesheet" type="text/css" media="all" />
-<link href="{% url cms_media "css/fancybox.css" %}" rel="stylesheet" type="text/css" media="all" />
+<link href="{% get_static_prefix %}css/cms.css" rel="stylesheet" type="text/css" media="all" />
+<link href="{% get_static_prefix %}css/fancybox.css" rel="stylesheet" type="text/css" media="all" />
 {% endblock %}
 
 {% block extrahead %}
@@ -23,15 +23,15 @@
 <script type="text/javascript" src="{{ TCMS_CKEDITOR_BASE_URL }}ckeditor_source.js"></script>
 <script type="text/javascript" src="{{ TCMS_CKEDITOR_BASE_URL }}adapters/jquery.js"></script>
 <script type="text/javascript">
-    var ckeditorConfig = "{% url cms_media "js/ckeditor_config.js" %}";
+    var ckeditorConfig = "{% get_static_prefix %}js/ckeditor_config.js";
 </script>
-<script type="text/javascript" src="{% url cms_media "js/ckeditor_config.js" %}"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/ckeditor_config.js"></script>
 {% endif %}
 
-<script type="text/javascript" src="{% url cms_media "js/cms.js" %}"></script>
-<script type="text/javascript" src="{% url cms_media "js/jquery.form.js" %}"></script>
-<script type="text/javascript" src="{% url cms_media "js/jquery.mousewheel.js" %}"></script>
-<script type="text/javascript" src="{% url cms_media "js/jquery.fancybox.js" %}"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/cms.js"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/jquery.form.js"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/jquery.mousewheel.js"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/jquery.fancybox.js"></script>
 {% endblock %}
 
 {% block extra_breadcrumbs %}

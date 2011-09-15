@@ -639,7 +639,8 @@ def _load_templates():
     first value will be template name and second will be template verbose
     name.
     """
-    mod = __import__(settings.TCMS_PAGES)
+    from django.utils.importlib import import_module
+    mod = import_module(settings.TCMS_PAGES)
 
     entries, dir_name = {}, dirname(mod.__file__)
     for path, subdirs, files  in walk(dir_name):

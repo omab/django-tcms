@@ -1,5 +1,5 @@
 {% extends "cms/cms_base.html" %}
-{% load adminmedia %}
+{% load adminmedia static %}
 
 {% block extra_title %}Edit page{% endblock %}
 
@@ -7,7 +7,7 @@
 <link href="{% admin_media_prefix %}css/changelists.css" rel="stylesheet" type="text/css" media="all" />
 <link href="{% admin_media_prefix %}css/forms.css" rel="stylesheet" type="text/css" media="all" />
 {# cms css files #}
-<link href="{% url cms_media "css/cms.css" %}" rel="stylesheet" type="text/css" media="all" />
+<link href="{% get_static_prefix %}css/cms.css" rel="stylesheet" type="text/css" media="all" />
 {% endblock %}
 
 {% block extrahead %}
@@ -15,9 +15,9 @@
 <script type="text/javascript" src="{% admin_media_prefix %}js/jquery.min.js"></script>
 <script type="text/javascript" src="{% admin_media_prefix %}js/admin/RelatedObjectLookups.js"></script>
 {# cms JS files #}
-<script type="text/javascript" src="{% url cms_media "js/jquery.mousewheel.js" %}"></script>
-<script type="text/javascript" src="{% url cms_media "js/jquery.fancybox.js" %}"></script>
-<script type="text/javascript" src="{% url cms_media "js/cms.js" %}"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/jquery.mousewheel.js"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/jquery.fancybox.js"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/cms.js"></script>
 {% endblock %}
 
 {% block extra_breadcrumbs %}
@@ -161,7 +161,7 @@
           <td><span class="completed">{{ section.done_percent }}%</span></td>
           {% if perms.cms.add_value and perms.cms.change_value %}
           <td class="actions-links">
-            <a title="Edit" href="{{ section.basename }}/"><img src="{% url cms_media "img/edit.png" %}" alt="Edit" /></a>
+            <a title="Edit" href="{{ section.basename }}/"><img src="{% get_static_prefix %}img/edit.png" alt="Edit" /></a>
           </td>
           {% endif %}
         </tr>
