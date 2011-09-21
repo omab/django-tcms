@@ -57,8 +57,8 @@ class Page(SortedDict):
             section.page = self
 
     def set_sections(self):
-        """Setup fields in subclasses"""
-        raise NotImplementedError('Implement in subclass')
+        """Setup fields in subclasses, by default page has not sections."""
+        pass
 
     def load(self, values):
         """Load values. @values must be a list of (name, value) pairs.
