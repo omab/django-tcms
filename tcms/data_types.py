@@ -94,6 +94,11 @@ class RawIdType(PlainType):
     url = None   # url override in case url cannot be built from model like
                  # wsmodels/Product
 
+    def __init__(self, *args, **kwargs):
+        self.model = kwargs.pop('model', self.model)
+        self.url = kwargs.pop('url', self.url)
+        super(RawIdType, self).__init__(*args, **kwargs)
+
     def as_field(self, *args, **kwargs):
         """Prepares form field, uses custom url if preset or tries to build from
         model class. Raises AttributeError if none of this fields are defined"""
