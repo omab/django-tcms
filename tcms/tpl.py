@@ -9,6 +9,7 @@ from django.conf import settings
 from django.template import loader, Context
 from django.utils.datastructures import SortedDict
 from django.utils.safestring import mark_safe
+from django.utils.importlib import import_module
 
 from tcms.data_types import BaseType
 from tcms.utils import human_title
@@ -639,17 +640,20 @@ def _load_templates():
     first value will be template name and second will be template verbose
     name.
     """
-    from django.utils.importlib import import_module
     mod = import_module(settings.TCMS_PAGES)
 
     entries, dir_name = {}, dirname(mod.__file__)
-    for path, subdirs, files  in walk(dir_name):
+    for path, subdirs, files in walk(dir_name):
         name = path.replace(dir_name, '').strip(sep).replace(sep, '.')
 
-        if name and '__init__.py' in files: # possible python module
+        for file in filter(lambda f: f.endswith('.py'), files):
+            fname = file.replace('.py', '')
+            import_name = filter(None, (settings.TCMS_PAGES, name, fname))
+
             try:
-                import_name = settings.TCMS_PAGES + '.' + name
-                entries[name] = __import__(import_name, fromlist=[name]).PAGE
+                mod = import_module('.'.join(import_name))
+                if hasattr(mod, 'PAGE'):
+                    entries[name or fname] = mod.PAGE
             except (ImportError, AttributeError):
                 pass
     return entries
