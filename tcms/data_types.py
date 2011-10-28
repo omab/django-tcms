@@ -90,25 +90,33 @@ class PlainType(BaseType):
 class RawIdType(PlainType):
     """Raw Id type, allows related definition to proyect models entries"""
     # model or url must be defined or AttributeError will raised in that case
-    model = None # model related too
-    url = None   # url override in case url cannot be built from model like
-                 # wsmodels/Product
+    model = None  # model related too
+    url = None    # url override in case url cannot be built from model like
+                  # wsmodels/Product
+    model_key = 'pk'  # Custom model primary key field
+    select_related = None  # Select related option, it *must* be a list
 
     def __init__(self, *args, **kwargs):
         self.model = kwargs.pop('model', self.model)
         self.url = kwargs.pop('url', self.url)
+        self.model_key = kwargs.pop('model_key', self.model_key)
+        self.select_related = kwargs.pop('select_related', self.select_related)
         super(RawIdType, self).__init__(*args, **kwargs)
+
+    def get_model(self):
+        """Return model, imports it the first time if attribute is a string."""
+        if isinstance(self.model, basestring):
+            app_label, name = self.model.split('.', 1)
+            self.model = get_model(app_label, name)
+        return self.model
 
     def as_field(self, *args, **kwargs):
         """Prepares form field, uses custom url if preset or tries to build from
         model class. Raises AttributeError if none of this fields are defined"""
-        if self.url: # try url
+        if self.url:  # try url
             url = self.url
-        elif self.model: # try building using model options
-            model = self.model
-            if isinstance(model, (str, unicode)):
-                app_label, name = self.model.split('.', 1)
-                model = get_model(app_label, name)
+        elif self.model:  # try building using model options
+            model = self.get_model()
             opt = model._meta
             url = reverse('admin:%s_%s_changelist' % (opt.app_label,
                                                       opt.module_name))
@@ -123,9 +131,13 @@ class RawIdType(PlainType):
     def value(self, value):
         """Returns model instance from value, value will be iterpreted as
         a model id. Returns none if object does not exist."""
+        model = self.get_model()
+        qs = model.objects.get_query_set()
+        if self.select_related:
+            qs = qs.select_related(*self.select_related)
         try:
-            return self.model.objects.get(pk=value)
-        except:
+            return qs.get({self.model_key: value})
+        except model.DoesNotExist:
             return None
 
     def rawid_context(self, request):
