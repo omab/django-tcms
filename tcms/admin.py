@@ -131,7 +131,7 @@ class PageOptions(admin.ModelAdmin):
                 '<a title="Delete" href="p/%(id)s/delete/" class="warning"><img src="%(media)s/delete.png" alt="Delete" /></a>']
         links.append('<a title="History" href="%(id)s/history/"><img src="%(media)s/log.png" alt="History" /></a>')
         return ' '.join(links) % {'id': obj.id,
-                                  'media': '/cms-media/img',
+                                  'media': settings.STATIC_URL + 'img',
                                   'preview': obj.preview_url,
                                   'next': reverse('admin:tcms_page_changelist')}
     page_actions.allow_tags = True
