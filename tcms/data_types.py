@@ -136,7 +136,7 @@ class RawIdType(PlainType):
         if self.select_related:
             qs = qs.select_related(*self.select_related)
         try:
-            return qs.get({self.model_key: value})
+            return qs.get(**{self.model_key: value})
         except model.DoesNotExist:
             return None
 
