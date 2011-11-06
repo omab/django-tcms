@@ -35,6 +35,7 @@ setup(name='django-tcms',
       package_data={
           'tcms': [
               'templates/cms/*.html',
+              'templates/cms/edit/*.html',
               'static/css/*.css',
               'static/js/*.js',
               'static/img/*.png',
