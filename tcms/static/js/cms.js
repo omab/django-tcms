@@ -84,4 +84,14 @@ $(function(){
                     }
                });
     }
+
+    /* Small hack to fix the issue when RawID field is wrapped into Several Fieldset 
+       and selecting object in any of RawID fields will change only value of first one*/
+    $(".child .vForeignKeyRawIdAdminField").each(function(index) {
+        var el = $(this), 
+            anchor = el.next(".related-lookup");
+
+        el.attr("id", el.attr("id") + index);
+        anchor.attr("id", anchor.attr("id") + index);
+    });
 });
